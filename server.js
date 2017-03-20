@@ -1,17 +1,20 @@
 "use strict";
+
 const express = require('express');
 const multer = require('multer');
 const upload = multer({
 	storage: multer.memoryStorage()
 }).single('img');
 const optimizer = require('./optimizer');
-const logger = require('./log')();
+const log = require('./log');
+const logger = log();
 
 const app = express();
 
 const appOptions = {
 	maxWidth: 2000,
-	concurrency: 2
+	concurrency: 2,
+	logFile: 'server.log'
 };
 
 let numWorking = 0;
@@ -94,24 +97,14 @@ app.post('/\*', function(req, res) {
 	}
 });
 
-
 module.exports = function(options) {
-	let port = 8082;
-	if (options) {
-		if (options.port) {
-			port = options.port;
-		}
-		if (options.maxWidth) {
-			appOptions.maxWidth = options.maxWidth;
-		}
-		if (options.concurrency) {
-			appOptions.concurrency = options.concurrency
-		}
-	}
-	app.listen(port, function() {
+	// remove undefined
+	Object.keys(options).forEach(key => options[key] === undefined && delete options[key]);
+	options = Object.assign(appOptions, options);
+	log.setFile(options.logFile);
+	app.listen(options.port, function() {
 		logger.debug("Now listening for requests", {
-			port: port,
-			opts: appOptions
+			opts: options
 		});
 	});
 };
