@@ -74,7 +74,7 @@ app.get('/ping', function(req, res) {
 	res.status(204).set('Content-Type', 'text/plain').end();
 });
 app.get('/\*', function(req, res) {
-	logger.notice('Bad request: ' + req && req.originalUrl ? req.originalUrl : '');
+	logger.warn('Bad request: ' + req && req.originalUrl ? req.originalUrl : '');
 	res.status(400).set('Content-Type', 'text/plain').end();
 });
 
