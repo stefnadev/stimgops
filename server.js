@@ -71,7 +71,8 @@ const doOptimize = function(err, req, res) {
 
 app.get('/ping', function(req, res) {
 	logger.info('ping');
-	res.status(204).set('Content-Type', 'text/plain').end();
+	// Not 204 because the classic AWS Elastic Load Balancer only supports 200
+	res.status(200).set('Content-Type', 'text/plain').end();
 });
 app.get('/\*', function(req, res) {
 	logger.warn('Bad request: ' + req && req.originalUrl ? req.originalUrl : '');
