@@ -41,7 +41,9 @@ let optimize = function(data, cb) {
 	logger.debug("Optimize!", size);
 	imagemin.buffer(copyData, {
 		plugins: [
-			imageminMozjpeg(),
+			imageminMozjpeg({
+				quality: 85
+			}),
 			imageminPng({
 				optimizationLevel: 2
 			})
